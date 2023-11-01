@@ -1,0 +1,24 @@
+﻿@page
+@model FlightBooking.Models.Reservation
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error</title>
+</head>
+<body>
+    <h1>Error</h1>
+    <p>Reservations are not allowed for flights departing within 3 days.</p>
+    <p><a asp-action="Index" asp-controller="Home">Back to Home</a></p>
+</body>
+</html>
+This view displays an error message and provides a link to go back to the home page. You can customize the content and styling of the error view to fit your project's design and error message requirements.
+
+Remember to update the return View("ErrorView"); line in your CreateReservation action to use the actual path to your ErrorView.cshtml file.
+
+
+
+
+

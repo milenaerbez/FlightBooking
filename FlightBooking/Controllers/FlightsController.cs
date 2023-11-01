@@ -211,6 +211,14 @@ namespace FlightBooking.Controllers
                 }
                 if (!string.IsNullOrEmpty(userId))
                 {
+                    var currentDate = DateTime.Now;
+                    var departDate = flight.DepartureTime;
+
+                    var timeDif = departDate - currentDate;
+                    if (timeDif.Days < 3)
+                    {
+                        return View("~/Views/Reservations/ErrorView.cshtml");
+                    }
 
                     var reservationModel = new Reservation
                     {
