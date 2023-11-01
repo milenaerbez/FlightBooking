@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FlightBooking.Data;
 using FlightBooking.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FlightBooking.Controllers
 {
@@ -193,6 +195,51 @@ namespace FlightBooking.Controllers
             var searchResults = await flights.ToListAsync();
 
             return View(searchResults);
+        }
+
+        [AllowAnonymous]
+        public IActionResult CreateReservation(int flightId)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var flight = _context.Flight.Find(flightId);
+
+                if (flight == null)
+                {
+                    return NotFound();
+                }
+                if (!string.IsNullOrEmpty(userId))
+                {
+
+                    var reservationModel = new Reservation
+                    {
+                        FlightId = flightId,
+                        CustomerId = userId,
+                        Flight = flight
+
+
+                    };
+
+                    ViewBag.FlightId = flightId;
+                    ViewBag.CustomerId = userId;
+
+
+
+                    //Console.WriteLine("Flight Id:" + flightId);
+                    return View("~/Views/Reservations/Create.cshtml", reservationModel);
+                }
+                else
+                {
+
+                    return View("ErrorView");
+                }
+            }
+            else
+            {
+
+                return RedirectToAction("Login");
+            }
         }
     }
 }

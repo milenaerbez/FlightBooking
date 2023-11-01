@@ -37,6 +37,17 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Flights" asp-action="Search">Search</a>
                         </li>
+                        @if (User.IsInRole("Agent"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Reservations" asp-action="Index">Edit reservation</a>
+                            </li>
+                        }
+                        @if(User.IsInRole("Customer")){
+                             <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Reservations" asp-action="Index">My reservations</a>
+                            </li>
+                        }
                        
                       
                        

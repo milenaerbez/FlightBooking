@@ -50,7 +50,9 @@
                         <td>@flight.DepartureTime</td>
                         <td>@flight.Seats</td>
                         <td>@flight.Transfer</td>
-                        
+                        <td>
+                            <a asp-controller="Flights" asp-action="CreateReservation" asp-route-flightId="@flight.Id">Reserve</a>
+                        </td>
                     </tr>
                 }
             </tbody>
