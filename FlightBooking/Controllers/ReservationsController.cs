@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FlightBooking.Data;
 using FlightBooking.Models;
+using System.Security.Claims;
 
 namespace FlightBooking.Controllers
 {
@@ -22,8 +23,14 @@ namespace FlightBooking.Controllers
         // GET: Reservations
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Reservation.Include(r => r.Customer).Include(r => r.Flight);
+            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var applicationDbContext = _context.Reservation
+     .Where(r => r.CustomerId.Equals(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value))
+     .Include(r => r.Customer)
+     .Include(r => r.Flight);
             return View(await applicationDbContext.ToListAsync());
+          
+
         }
 
         // GET: Reservations/Details/5
@@ -33,7 +40,7 @@ namespace FlightBooking.Controllers
             {
                 return NotFound();
             }
-
+            //var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var reservation = await _context.Reservation
                 .Include(r => r.Customer)
                 .Include(r => r.Flight)
