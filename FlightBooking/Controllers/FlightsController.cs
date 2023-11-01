@@ -159,5 +159,40 @@ namespace FlightBooking.Controllers
         {
           return (_context.Flight?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        public async Task<IActionResult> Search(string departureLocation, string arrivalLocation, bool includeTransfers)
+        {
+            var flights = _context.Flight.AsQueryable();
+
+            if (!string.IsNullOrEmpty(departureLocation))
+            {
+                flights = flights.Where(f => f.DepartureLocation.Contains(departureLocation));
+            }
+
+            if (!string.IsNullOrEmpty(arrivalLocation))
+            {
+                flights = flights.Where(f => f.ArrivalLocation.Contains(arrivalLocation));
+            }
+            if (!includeTransfers)
+            {
+                flights = flights.Where(f => f.Transfer == 0);
+            }
+
+
+
+
+            //if (hasTransfers)
+            //{
+            //    flights = flights.Where(f => f.Transfer > 0);
+            //}
+            //else
+            //{
+            //    flights = flights.Where(f => f.Transfer == 0);
+            //}
+
+            var searchResults = await flights.ToListAsync();
+
+            return View(searchResults);
+        }
     }
 }
