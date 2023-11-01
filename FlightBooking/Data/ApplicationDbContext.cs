@@ -15,6 +15,7 @@ namespace FlightBooking.Data
         }
 
         public DbSet<AppUser> AppUser { get; set; }
+        public DbSet<Flight> Flight { get; set; }
 
     }
 }

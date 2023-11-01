@@ -25,6 +25,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if(User.IsInRole("Admin")){
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/CreateUser">Create User</a>
+                            </li>
+                        }
+                       @if(User.IsInRole("Agent")){
+                             <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Flights" asp-action="Index">Flights</a>
+                        </li>
+                       }
+                      
                        
                     </ul>
                 </div>
