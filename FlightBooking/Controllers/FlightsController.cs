@@ -12,6 +12,7 @@ using System.Security.Claims;
 
 namespace FlightBooking.Controllers
 {
+    
     public class FlightsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,6 +23,7 @@ namespace FlightBooking.Controllers
         }
 
         // GET: Flights
+        [Authorize(Roles ="Agent,Admin")]
         public async Task<IActionResult> Index()
         {
               return _context.Flight != null ? 
@@ -30,6 +32,7 @@ namespace FlightBooking.Controllers
         }
 
         // GET: Flights/Details/5
+        [Authorize(Roles = "Agent,Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Flight == null)
@@ -48,6 +51,7 @@ namespace FlightBooking.Controllers
         }
 
         // GET: Flights/Create
+        [Authorize(Roles = "Agent")]
         public IActionResult Create()
         {
             return View();
@@ -58,6 +62,7 @@ namespace FlightBooking.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Agent")]
         public async Task<IActionResult> Create([Bind("Id,FlightNumber,DepartureLocation,ArrivalLocation,DepartureTime,Seats,Transfer")] Flight flight)
         {
             if (ModelState.IsValid)
@@ -70,6 +75,7 @@ namespace FlightBooking.Controllers
         }
 
         // GET: Flights/Edit/5
+        [Authorize(Roles = "Agent")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Flight == null)
@@ -90,6 +96,7 @@ namespace FlightBooking.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Agent")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FlightNumber,DepartureLocation,ArrivalLocation,DepartureTime,Seats,Transfer")] Flight flight)
         {
             if (id != flight.Id)
@@ -121,6 +128,7 @@ namespace FlightBooking.Controllers
         }
 
         // GET: Flights/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Flight == null)
@@ -140,6 +148,7 @@ namespace FlightBooking.Controllers
 
         // POST: Flights/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -161,7 +170,7 @@ namespace FlightBooking.Controllers
         {
           return (_context.Flight?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> Search(string departureLocation, string arrivalLocation, bool includeTransfers)
         {
             var flights = _context.Flight.AsQueryable();
