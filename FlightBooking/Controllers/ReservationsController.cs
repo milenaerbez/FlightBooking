@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FlightBooking.Data;
 using FlightBooking.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlightBooking.Controllers
 {
@@ -23,15 +24,31 @@ namespace FlightBooking.Controllers
         // GET: Reservations
         public async Task<IActionResult> Index()
         {
-            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var applicationDbContext = _context.Reservation
-     .Where(r => r.CustomerId.Equals(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value))
-     .Include(r => r.Customer)
-     .Include(r => r.Flight);
-            return View(await applicationDbContext.ToListAsync());
+
+            if (User.IsInRole("Agent"))
+            {
+                var reservations = await _context.Reservation
+            .Include(r => r.Customer)
+            .Include(r => r.Flight)
+            .ToListAsync();
+
+                return View(reservations);
+            }
+            else
+            {
+
+                string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var applicationDbContext = _context.Reservation
+         .Where(r => r.CustomerId.Equals(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value))
+         .Include(r => r.Customer)
+         .Include(r => r.Flight);
+                return View(await applicationDbContext.ToListAsync());
+            }
           
 
         }
+
+
 
         // GET: Reservations/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -78,7 +95,7 @@ namespace FlightBooking.Controllers
             ViewData["FlightId"] = new SelectList(_context.Flight, "Id", "Id", reservation.FlightId);
             return View(reservation);
         }
-
+        [Authorize(Roles ="Agent")]
         // GET: Reservations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -102,6 +119,7 @@ namespace FlightBooking.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Agent")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,FlightId,Status,Seats")] Reservation reservation)
         {
             if (id != reservation.Id)
@@ -135,6 +153,7 @@ namespace FlightBooking.Controllers
         }
 
         // GET: Reservations/Delete/5
+        [Authorize(Roles = "Agent")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Reservation == null)
@@ -156,6 +175,7 @@ namespace FlightBooking.Controllers
 
         // POST: Reservations/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Agent")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
