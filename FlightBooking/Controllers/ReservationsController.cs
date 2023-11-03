@@ -9,13 +9,15 @@ using FlightBooking.Data;
 using FlightBooking.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using FlightBooking.Hub;
+using Microsoft.AspNetCore.SignalR;
 
 namespace FlightBooking.Controllers
 {
     public class ReservationsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
+        private readonly IHubContext<ReservationHub> _hubContext;
         public ReservationsController(ApplicationDbContext context)
         {
             _context = context;
@@ -111,6 +113,9 @@ namespace FlightBooking.Controllers
             }
             ViewData["CustomerId"] = new SelectList(_context.AppUser, "Id", "Id", reservation.CustomerId);
             ViewData["FlightId"] = new SelectList(_context.Flight, "Id", "Id", reservation.FlightId);
+            await _hubContext.Clients.All.SendAsync("ReceiveReservationUpdate", "New reservation created: " + reservation.Id);
+
+           // return RedirectToAction("Index");
             return View(reservation);
         }
 
