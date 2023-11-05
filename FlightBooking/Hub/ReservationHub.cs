@@ -15,6 +15,10 @@ namespace FlightBooking.Hub
             await Clients.All.SendAsync("ReceiveReservationUpdate", message);
         }
 
+        public async Task SendReservationEdit(string message)
+        {
+            await Clients.All.SendAsync("ReceiveReservationEdit", message);
+        }
 
 
 

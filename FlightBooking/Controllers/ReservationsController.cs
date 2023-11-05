@@ -142,7 +142,10 @@ namespace FlightBooking.Controllers
                 try
                 {
                     _context.Update(reservation);
+                  
                     await _context.SaveChangesAsync();
+                    var reservationJson = JsonConvert.SerializeObject(reservation);
+                    await _hubContext.Clients.All.SendAsync("ReceiveReservationUpdate", reservationJson);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

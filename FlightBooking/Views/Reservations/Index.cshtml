@@ -21,6 +21,14 @@
             return console.error(err.toString());
         });
 
+        connection.on("ReceiveReservationEdit",function (message){
+            var reservation=JSON.parse(message);
+            var statusElement = $(`table tbody tr[data-reservation-id='${reservation.Id}'] td.status`);
+            statusElement.text(reservation.Status);
+        });
+
+
+
         connection.on("ReceiveReservationUpdate", function (message) {
             var reservation = JSON.parse(message);
             //console.log("Received message: " + JSON.stringify(reservation));
@@ -54,7 +62,7 @@
 </p>
 <table class="table">
     <thead>
-        <tr>
+        <tr >
             <th>
                 @Html.DisplayNameFor(model => model.Customer)
             </th>
@@ -72,7 +80,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+            <tr data-reservation-id="@item.Id">
             <td>
                 @Html.DisplayFor(modelItem => item.Customer.Id)
             </td>
