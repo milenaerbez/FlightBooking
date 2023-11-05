@@ -5,6 +5,47 @@
     ViewData["Title"] = "Index";
    
 }
+<head>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.9/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/ReservationHub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        connection.start().then(function () {
+            console.log("SignalR connected.");
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        connection.on("ReceiveReservationUpdate", function (message) {
+            var reservation = JSON.parse(message);
+            //console.log("Received message: " + JSON.stringify(reservation));
+            console.log("Rezervacija: "+JSON.stringify(reservation));
+            console.log("Rez: "+message);
+         
+            //ovde vidim u konzoli da se rezervacija uspesno prosledila: sada treba da dodam u listu
+
+        
+            var newRow = `<tr>
+                                <td>${reservation.CustomerId}</td>
+                                <td>${reservation.FlightId}</td>
+                                <td>${reservation.Status}</td>
+                                <td>${reservation.Seats}</td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="${reservation.Id}">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="${reservation.Id}">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="${reservation.Id}">Delete</a>
+                                </td>
+                            </tr>`;
+
+            $("table tbody").append(newRow);
+        });
+    </script>
+</head>
 
 <h1>Index</h1>
 

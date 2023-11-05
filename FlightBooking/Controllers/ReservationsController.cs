@@ -11,6 +11,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using FlightBooking.Hub;
 using Microsoft.AspNetCore.SignalR;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace FlightBooking.Controllers
 {
@@ -92,7 +94,8 @@ namespace FlightBooking.Controllers
             {
                 _context.Add(reservation);
                 await _context.SaveChangesAsync();
-                await _hubContext.Clients.All.SendAsync("ReceiveReservationUpdate", "New reservation created: " + reservation.Id);
+                var reservationJson = JsonConvert.SerializeObject(reservation);
+                await _hubContext.Clients.All.SendAsync("ReceiveReservationUpdate", reservationJson);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(_context.AppUser, "Id", "Id", reservation.CustomerId);

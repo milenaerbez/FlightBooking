@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<head>
+@*<head>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.9/signalr.min.js"></script>
@@ -19,10 +19,12 @@
 
         connection.on("ReceiveReservationUpdate", function (message) {
             console.log("Received message: " + message);
-            
+            //ovde vidim u konzoli da se rezervacija uspesno prosledila: sada treba da dodam u listu
+
+
         });
     </script>
-</head>
+</head>*@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
