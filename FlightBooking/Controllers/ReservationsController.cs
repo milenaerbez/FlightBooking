@@ -18,9 +18,10 @@ namespace FlightBooking.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IHubContext<ReservationHub> _hubContext;
-        public ReservationsController(ApplicationDbContext context)
+        public ReservationsController(ApplicationDbContext context, IHubContext<ReservationHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
         // GET: Reservations
@@ -91,6 +92,7 @@ namespace FlightBooking.Controllers
             {
                 _context.Add(reservation);
                 await _context.SaveChangesAsync();
+                await _hubContext.Clients.All.SendAsync("ReceiveReservationUpdate", "New reservation created: " + reservation.Id);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(_context.AppUser, "Id", "Id", reservation.CustomerId);

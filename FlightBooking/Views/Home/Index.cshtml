@@ -17,7 +17,7 @@
             return console.error(err.toString());
         });
 
-        connection.on("ReceiveMessage", function (message) {
+        connection.on("ReceiveReservationUpdate", function (message) {
             console.log("Received message: " + message);
             
         });

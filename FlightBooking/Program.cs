@@ -82,6 +82,6 @@ app.MapControllerRoute(
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<ReservationHub>("/reservationhub");
+    endpoints.MapHub<ReservationHub>("/ReservationHub");
 });
 app.Run();
