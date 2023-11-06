@@ -92,6 +92,18 @@ namespace FlightBooking.Controllers
         {
             if (ModelState.IsValid)
             {
+                var flight = await _context.Flight.FindAsync(reservation.FlightId);
+                if (flight == null)
+                {
+                    return NotFound();
+                }
+                if (flight.Seats > 0)
+                {
+                    flight.Seats--;
+                }
+
+                _context.Update(flight);
+
                 _context.Add(reservation);
                 await _context.SaveChangesAsync();
                 var reservationJson = JsonConvert.SerializeObject(reservation);
