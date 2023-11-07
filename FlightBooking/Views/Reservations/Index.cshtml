@@ -44,9 +44,9 @@
                                 <td>${reservation.Status}</td>
                                 <td>${reservation.Seats}</td>
                                 <td>
-                                    <a asp-action="Edit" asp-route-id="${reservation.Id}">Edit</a> |
-                                    <a asp-action="Details" asp-route-id="${reservation.Id}">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="${reservation.Id}">Delete</a>
+                                    <a href="ReservationsController/Edit/${reservation.Id}">Edit</a> |
+                                    <a href="ReservationsController/Details/${reservation.Id}">Details</a> |
+                                    <a href="ReservationsController/Delete/${reservation.Id}">Delete</a>
                                 </td>
                             </tr>`;
 
@@ -58,7 +58,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+   @* <a asp-action="Create">Create New</a>*@
 </p>
 <table class="table">
     <thead>

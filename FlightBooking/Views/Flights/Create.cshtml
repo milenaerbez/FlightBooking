@@ -17,9 +17,16 @@
                 <input asp-for="FlightNumber" class="form-control" />
                 <span asp-validation-for="FlightNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
+           @* <div class="form-group">
                 <label asp-for="DepartureLocation" class="control-label"></label>
                 <input asp-for="DepartureLocation" class="form-control" />
+                <span asp-validation-for="DepartureLocation" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="DepartureLocation" class="control-label">Departure Location</label>
+                <select asp-for="DepartureLocation" asp-items="@(new SelectList(FlightBooking.Models.City.GetCities()))" class="form-control">
+                    <option value="">Select Departure Location</option>
+                </select>
                 <span asp-validation-for="DepartureLocation" class="text-danger"></span>
             </div>
             <div class="form-group">

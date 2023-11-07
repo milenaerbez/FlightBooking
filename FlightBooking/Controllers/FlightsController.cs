@@ -200,6 +200,7 @@ namespace FlightBooking.Controllers
             //{
             //    flights = flights.Where(f => f.Transfer == 0);
             //}
+            flights = flights.Where(f => f.Seats > 0);
 
             var searchResults = await flights.ToListAsync();
 
